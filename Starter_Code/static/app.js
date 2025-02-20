@@ -1,24 +1,26 @@
 // Build the metadata panel
 function buildMetadata(firstSample) {
-  d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
+  d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json")
+   .then((data) => {
 
+    console.log("firstSample:", firstSample)
     // get the metadata field
-    const metadata = data.metadata;  
-
+    const metaData = data.metadata;  
+    console.log("metaData:", data.metadata);
     // Filter the metadata for the object with the desired sample number
-    const sampleMeta = metadata.filter( meta => meta.id === firstSample)[0];
-
+    let sampleMeta = metaData.filter( meta => meta.id === firstSample)[0];
+    console.log("sampleMeta:", sampleMeta);
 
     // Use d3 to select the panel with id of `#sample-metadata`
     const metadataPanel = d3.select("#sample-metadata");
-
+    console.log("metadataPanel:", metadataPanel)
     // Use `.html("") to clear any existing metadata
     metadataPanel.html("");
 
     // Inside a loop, you will need to use d3 to append new
     // tags for each key-value in the filtered metadata.
-    Object.entries(sampleMeta).forEach((key, value) => {
-      metadataPanel.append("h6").text(`${key}: ${value}`);  
+    Object.entries(sampleMeta).forEach(([key, value]) => {
+      metadataPanel.append("<h6>").text(`${key}: ${value}`);  
     })
   });
 };
@@ -47,7 +49,7 @@ function buildCharts(firstSample) {
       marker: {
         size: sample_values,
         color: otu_ids,
-        colorscale: 'Plotly3'
+        colorscale: 'Viridis'
       }
     };    
 
@@ -55,6 +57,7 @@ function buildCharts(firstSample) {
     const bubbleLayout = {
       title: 'Bacteria Cultures Per Sample',
       xaxis: { title: 'OTU ID' },
+      yaxis: { title: 'Number of Bacteria'},
       hovermode: 'closest'
     };
 
@@ -77,8 +80,7 @@ function buildCharts(firstSample) {
 
     const barLayout = {
       title: 'Top 10 Bacteria Cultures Found',
-      xaxis: { title: 'Sample Value' },
-      yaxis: { title: 'OTU ID' }
+      xaxis: { title: 'Number of Bacteria' }
     };
 
     // Render the Bar Chart
@@ -88,7 +90,8 @@ function buildCharts(firstSample) {
 
 // Function to run on page load
 function init() {
-  d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
+  d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json")
+  .then((data) => {
 
     // Get the names field
     const names = data.names;
