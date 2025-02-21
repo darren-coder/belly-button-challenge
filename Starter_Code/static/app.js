@@ -5,41 +5,52 @@ function buildMetadata(firstSample) {
 
     console.log("firstSample:", firstSample)
     // get the metadata field
-    const metaData = data.metadata;  
+    let metaData = data.metadata;  
+    metaData.forEach(item => {
+      item.id = item.id.toString();
+    });
     console.log("metaData:", data.metadata);
+
+
     // Filter the metadata for the object with the desired sample number
     let sampleMeta = metaData.filter( meta => meta.id === firstSample)[0];
     console.log("sampleMeta:", sampleMeta);
 
     // Use d3 to select the panel with id of `#sample-metadata`
     const metadataPanel = d3.select("#sample-metadata");
-    console.log("metadataPanel:", metadataPanel)
+    
     // Use `.html("") to clear any existing metadata
     metadataPanel.html("");
-
+    
     // Inside a loop, you will need to use d3 to append new
     // tags for each key-value in the filtered metadata.
     Object.entries(sampleMeta).forEach(([key, value]) => {
-      metadataPanel.append("<h6>").text(`${key}: ${value}`);  
+      metadataPanel.append("h6").text(`${key}: ${value}`);  
     })
+    console.log("metadataPanel:", metadataPanel)
   });
 };
 
 // function to build both charts
 function buildCharts(firstSample) {
-  d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
+  d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json")
+  .then((data) => {
 
     // Get the samples field
     const samplesField = data.samples;
+    console.log("samplesField", samplesField)
 
     // Filter the samples for the object with the desired sample number
     const sampleData = samplesField.filter(sampleObj =>  sampleObj.id === firstSample)[0];
-     
+    console.log("sampleData", sampleData)
+
     // Get the otu_ids, otu_labels, and sample_values
     const otu_ids = sampleData.otu_ids;
+    console.log("otu ids:", otu_ids)
     const otu_labels = sampleData.otu_labels;
+    console.log("otu labels:")
     const sample_values = sampleData.sample_values;
-
+    console.log("sample values:", sample_values)
     // Build a Bubble Chart
     const bubbleTrace = {
       x: otu_ids,
