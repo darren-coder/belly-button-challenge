@@ -3,7 +3,7 @@ function buildMetadata(firstSample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json")
    .then((data) => {
 
-    console.log("firstSample:", firstSample)
+    console.log("firstSample:", firstSample);
     // get the metadata field
     let metaData = data.metadata;  
     metaData.forEach(item => {
@@ -27,7 +27,7 @@ function buildMetadata(firstSample) {
     Object.entries(sampleMeta).forEach(([key, value]) => {
       metadataPanel.append("h6").text(`${key}: ${value}`);  
     })
-    console.log("metadataPanel:", metadataPanel)
+    console.log("metadataPanel:", metadataPanel);
   });
 };
 
@@ -38,19 +38,19 @@ function buildCharts(firstSample) {
 
     // Get the samples field
     const samplesField = data.samples;
-    console.log("samplesField", samplesField)
+    console.log("samplesField", samplesField);
 
     // Filter the samples for the object with the desired sample number
     const sampleData = samplesField.filter(sampleObj =>  sampleObj.id === firstSample)[0];
-    console.log("sampleData", sampleData)
+    console.log("sampleData", sampleData);
 
     // Get the otu_ids, otu_labels, and sample_values
     const otu_ids = sampleData.otu_ids;
-    console.log("otu ids:", otu_ids)
+    console.log("otu ids:", otu_ids);
     const otu_labels = sampleData.otu_labels;
-    console.log("otu labels:")
+    console.log("otu labels:", otu_labels);
     const sample_values = sampleData.sample_values;
-    console.log("sample values:", sample_values)
+    console.log("sample values:", sample_values);
     // Build a Bubble Chart
     const bubbleTrace = {
       x: otu_ids,
@@ -78,8 +78,11 @@ function buildCharts(firstSample) {
     // Build a Bar Chart
     // Don't forget to slice and reverse the input data appropriately
     const barData = sampleData.sample_values.slice(0, 10).reverse(); // Get top 10 values and reverse for chart
+    console.log("barData:", barData);
     const barLabels = sampleData.otu_ids.slice(0, 10).reverse().map(id => `OTU ${id}`);
+    console.log("barLabels:", barLabels);
     const barText = sampleData.otu_labels.slice(0, 10).reverse();
+    console.log("barText:", barText);
 
     const barTrace = {
       type: "bar",
@@ -106,6 +109,7 @@ function init() {
 
     // Get the names field
     const names = data.names;
+    console.log("names:", names);
 
     // Use d3 to select the dropdown with id of `#selDataset`
     const dropDownMenu = d3.select("#selDataset");
@@ -121,7 +125,7 @@ function init() {
 
     // Get the first sample from the list
     const firstSample = names[0];
-
+    console.log("firstSample:", firstSample);
     // Build charts and metadata panel with the first sample
     buildCharts(firstSample);
     buildMetadata(firstSample);
@@ -136,8 +140,8 @@ function init() {
 // Function for event listener
 function optionChanged(newSample) {
   // Build charts and metadata panel each time a new sample is selected  
-  buildCharts(newSample)
-  buildMetadata(newSample)
+  buildCharts(newSample);
+  buildMetadata(newSample);
 }
 
 // Initialize the dashboard
